@@ -42,6 +42,15 @@ export function launchAsync(token: string, subdomain: string, content: Content, 
             return;
         }
 
+        if (subdomain)
+        {
+            // test that the subdomain is ASCII-only to prevent Unicode redirect attacks
+            if (!/^[\x00-\x7F]*$/.test(subdomain)) {
+                reject({ code: ErrorCode.BadArgument, message: 'Subdomain must be ASCII only' });
+                return;
+            }
+        }
+
         const startTime = Date.now();
         options = {
             uiZIndex: 1000,
